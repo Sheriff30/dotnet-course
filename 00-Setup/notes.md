@@ -4,7 +4,7 @@
 - [x] الدرس 1: يعني إيه .NET و C#
 - [x] الدرس 2: التسطيب
 - [x] الدرس 3: أول برنامج
-- [ ] الدرس 4: Git و GitHub
+- [x] الدرس 4: Git و GitHub
 
 ---
 
@@ -37,6 +37,28 @@ dotnet run
 ```csharp
 Console.WriteLine("Hello, World!"); // اطبع السطر ده على الشاشة
 ```
+
+
+## الدرس 4: Git و GitHub
+- **Git:** برنامج بيحفظ "نسخ" من الكود (commits)، فتقدر ترجع لأي نسخة قديمة.
+- **GitHub:** موقع بتحط عليه الكود أونلاين (Backup + Portfolio).
+
+```powershell
+git --version                          # اتأكد إن Git متسطّب
+git config --global user.name "Sherif"
+git config --global user.email "your@email.com"
+
+cd D:\dotnet-course
+dotnet new gitignore                   # يتجاهل bin و obj و .vs
+git init                               # يبدأ Git في الفولدر
+git add .                              # يجهّز كل الملفات
+git commit -m "Phase 0: setup"         # يحفظ نسخة
+git branch -M main
+git remote add origin https://github.com/USERNAME/dotnet-course.git
+git push -u origin main                # يرفع على GitHub
+```
+
+بعد كده كل مرة: `git add .` ← `git commit -m "رسالة"` ← `git push`
 
 ## ✍️ التمرين
 1. اعمل مشروع HelloWorld جوه فولدر `exercises` وشغّله.

@@ -8,7 +8,7 @@
 ## 📊 متابعة التقدم
 علّم على المرحلة اللي خلّصتها بتغيير `[ ]` لـ `[x]`.
 
-- [ ] **00 - التجهيز:** يعني إيه .NET، التسطيب، أول برنامج، Git
+- [x] **00 - التجهيز:** يعني إيه .NET، التسطيب، أول برنامج، Git
 - [ ] **01 - أساسيات C#:** المتغيرات، الشروط، الـ Loops، الـ Methods، الـ Collections
 - [ ] **02 - OOP:** Classes، Inheritance، Polymorphism، Interfaces، SOLID
 - [ ] **03 - C# متقدم:** Exceptions، Generics، LINQ، Delegates، Async/Await، Files و JSON
