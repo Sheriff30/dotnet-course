@@ -2,7 +2,7 @@
 
 ## الدروس
 - [x] الدرس 1: المتغيرات والأنواع
-- [ ] الدرس 2: العمليات الحسابية والمنطقية
+- [x] الدرس 2: العمليات الحسابية والمنطقية
 - [ ] الدرس 3: الشروط (if/else و switch)
 - [ ] الدرس 4: الـ Loops
 - [ ] الدرس 5: الـ Methods
@@ -68,3 +68,60 @@ bool isEven = number % 2 == 0;
 
 ### الأولوية
 `()` ← `* / %` ← `+ -` ← مقارنة ← `&&` ← `||`
+
+## الدرس 3: الشروط
+```csharp
+if (score >= 90)
+{
+    Console.WriteLine("A");
+}
+else if (score >= 80)
+{
+    Console.WriteLine("B");
+}
+else
+{
+    Console.WriteLine("F");
+}
+```
+- الشروط بتتراجع **بالترتيب**، وأول واحد يتحقق بيتنفذ والباقي بيتساب.
+- استخدم `{ }` دايماً، حتى لو سطر واحد.
+
+### Ternary: if صغيرة في سطر
+```csharp
+string result = score >= 50 ? "Pass" : "Fail";
+```
+
+### switch
+```csharp
+switch (day)
+{
+    case 1:
+        Console.WriteLine("Saturday");
+        break;
+    case 6:
+    case 7:
+        Console.WriteLine("Weekend");
+        break;
+    default:
+        Console.WriteLine("Invalid");
+        break;
+}
+```
+
+### switch expression (الطريقة الحديثة)
+```csharp
+string name = day switch
+{
+    1 => "Saturday",
+    2 => "Sunday",
+    _ => "Invalid"      // _ = أي حاجة تانية
+};
+
+string grade = score switch
+{
+    >= 90 => "A",
+    >= 80 => "B",
+    _ => "F"
+};
+```
