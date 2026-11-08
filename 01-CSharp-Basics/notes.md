@@ -3,8 +3,8 @@
 ## الدروس
 - [x] الدرس 1: المتغيرات والأنواع
 - [x] الدرس 2: العمليات الحسابية والمنطقية
-- [ ] الدرس 3: الشروط (if/else و switch)
-- [ ] الدرس 4: الـ Loops
+- [x] الدرس 3: الشروط (if/else و switch)
+- [x] الدرس 4: الـ Loops
 - [ ] الدرس 5: الـ Methods
 - [ ] الدرس 6: Arrays و Lists و Dictionaries
 - [ ] الدرس 7: التعامل مع النصوص
@@ -125,3 +125,131 @@ string grade = score switch
     _ => "F"
 };
 ```
+
+## الدرس 4: الـ Loops
+### for: لما تعرف هتكرر كام مرة
+```csharp
+for (int i = 1; i <= 5; i++)
+{
+    Console.WriteLine(i);   // 1 2 3 4 5
+}
+// البداية ; الشرط ; الخطوة
+```
+
+### while: طول ما الشرط صح (ممكن متتنفذش ولا مرة)
+```csharp
+int count = 0;
+while (count < 3)
+{
+    count++;
+}
+```
+
+### do-while: بتتنفذ مرة على الأقل، وبعدين تشيّك
+```csharp
+int score;
+do
+{
+    Console.Write("Enter score (0-100): ");
+    score = int.Parse(Console.ReadLine());
+} while (score < 0 || score > 100);
+```
+
+### foreach: لكل عنصر في مجموعة
+```csharp
+foreach (char c in "Sherif")
+{
+    Console.WriteLine(c);
+}
+```
+
+### break و continue
+- `break`: اخرج من الـ loop خالص
+- `continue`: سيب اللفة دي وروح للي بعدها
+
+### Nested loops
+```csharp
+for (int row = 1; row <= 3; row++)
+{
+    for (int col = 1; col <= row; col++)
+    {
+        Console.Write("*");
+    }
+    Console.WriteLine();
+}
+```
+
+⚠️ Infinite loop: لو الشرط عمره ما بقى false، البرنامج هيفضل شغال للأبد. اتأكد إن في حاجة بتتغير جوه الـ loop.
+
+### رقم عشوائي
+```csharp
+int secret = Random.Shared.Next(1, 101);   // من 1 لـ 100
+```
+
+#### الفرق عن JavaScript
+| JavaScript | C# |
+|---|---|
+| `for (let i = 0; ...)` | `for (int i = 0; ...)` |
+| `for (const x of arr)` | `foreach (var x in arr)` |
+| `for (const key in obj)` | مفيش، بنلف على `dict.Keys` |
+| `arr.forEach(x => ...)` | `list.ForEach(x => ...)` (للـ List بس) |
+
+## الدرس 5: الـ Methods
+```csharp
+static int Add(int a, int b)
+{
+    return a + b;
+}
+// static + نوع اللي بترجعه + الاسم + (البارامترز بأنواعها)
+```
+- `void`: مش بترجع حاجة.
+- الأسامي PascalCase: `CalculateTotal` مش `calculateTotal`.
+- جوه `Program` لازم `static` عشان تتنادى من `Main`.
+
+### Expression-bodied
+```csharp
+static bool IsEven(int n) => n % 2 == 0;
+```
+
+### Default و Named parameters
+```csharp
+static void PrintLine(char symbol = '=', int length = 20) { ... }
+PrintLine();                 // ====================
+PrintLine('-', 10);
+PrintLine(length: 5);        // =====
+```
+
+### Overloading: نفس الاسم، بارامترز مختلفة
+```csharp
+static int Add(int a, int b) => a + b;
+static double Add(double a, double b) => a + b;
+static int Add(int a, int b, int c) => a + b + c;
+```
+
+### out و TryParse
+```csharp
+if (int.TryParse(input, out int number))
+{
+    // التحويل نجح، و number فيه القيمة
+}
+else
+{
+    // المستخدم كتب حاجة مش رقم - مفيش crash
+}
+```
+
+### ref: تعديل المتغير الأصلي
+```csharp
+static void Double(ref int x) => x *= 2;
+int n = 5;
+Double(ref n);   // n = 10
+```
+
+#### الفرق عن JavaScript
+| JavaScript | C# |
+|---|---|
+| `function add(a, b)` | `static int Add(int a, int b)` |
+| `const f = (a) => a * 2` | `static int F(int a) => a * 2;` |
+| مفيش Overloading | في Overloading |
+| مفيش ref/out | في ref و out |
+| `camelCase` | `PascalCase` |
