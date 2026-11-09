@@ -3,7 +3,7 @@
 ## الدروس
 - [x] الدرس 1: يعني إيه Database
 - [x] الدرس 2: تسطيب SQL Server و SSMS
-- [ ] الدرس 3: SELECT و WHERE و ORDER BY
+- [x] الدرس 3: SELECT و WHERE و ORDER BY
 - [ ] الدرس 4: INSERT و UPDATE و DELETE
 - [ ] الدرس 5: JOINs
 - [ ] الدرس 6: GROUP BY والـ Aggregate functions
@@ -69,3 +69,49 @@ SELECT * FROM Books ORDER BY Genre, Price DESC;   -- بأكتر من عمود
 
 ### ترتيب الكتابة
 `SELECT` ← `FROM` ← `WHERE` ← `ORDER BY`
+
+## الدرس 4: INSERT و UPDATE و DELETE
+### INSERT: إضافة
+```sql
+INSERT INTO Books (Title, Author, Genre, PublishYear, Pages, Price, AvailableCopies)
+VALUES ('Clean Code', 'Robert Martin', 'Programming', 2008, 464, 850, 3);
+
+-- أكتر من صف مرة واحدة
+INSERT INTO Members (FullName, City, JoinDate) VALUES
+('Ali', 'Cairo', '2026-11-08'),
+('Mai', 'Giza',  '2026-11-08');
+```
+- متكتبش الـ `Id`: الـ `IDENTITY` بيعمله لوحده.
+- الأعمدة اللي `NULL` مسموح بيها ممكن تسيبها.
+
+### UPDATE: تعديل
+```sql
+UPDATE Books
+SET Price = 900, AvailableCopies = AvailableCopies + 1
+WHERE Id = 1;
+```
+
+### DELETE: مسح
+```sql
+DELETE FROM Members WHERE Id = 9;
+```
+
+### ⚠️ أخطر غلطة
+`UPDATE` أو `DELETE` **من غير WHERE** = بيتنفذ على **كل الجدول**.
+✅ اعمل `SELECT` بنفس الـ `WHERE` الأول، واتأكد من النتيجة.
+
+### Foreign Key بيحميك
+مينفعش تمسح كتاب ليه استعارات، لأن الاستعارات هتبقى بتشاور على حاجة مش موجودة.
+
+### Transaction: شبكة أمان
+```sql
+BEGIN TRANSACTION;
+DELETE FROM Borrowings;
+SELECT * FROM Borrowings;   -- فاضي
+ROLLBACK;                   -- رجّع كل حاجة
+-- COMMIT;                  -- أو ثبّت التغيير
+```
+
+### تواريخ
+- `GETDATE()`: التاريخ والوقت دلوقتي
+- `CAST(GETDATE() AS DATE)`: التاريخ بس
