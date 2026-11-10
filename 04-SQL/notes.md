@@ -6,7 +6,7 @@
 - [x] الدرس 3: SELECT و WHERE و ORDER BY
 - [x] الدرس 4: INSERT و UPDATE و DELETE
 - [x] الدرس 5: JOINs
-- [ ] الدرس 6: GROUP BY والـ Aggregate functions
+- [x] الدرس 6: GROUP BY والـ Aggregate functions
 - [ ] الدرس 7: Keys و Normalization
 - [ ] الدرس 8: Indexes و Stored Procedures و Views
 
