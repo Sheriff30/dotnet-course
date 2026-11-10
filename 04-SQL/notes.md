@@ -158,3 +158,34 @@ WHERE br.Id IS NULL;
 | `LEFT JOIN` | كل الشمال + المقابل لو موجود |
 | `RIGHT JOIN` | كل اليمين + المقابل (نادراً بنستخدمها) |
 | `FULL JOIN` | كل حاجة من الاتنين |
+
+## الدرس 6: GROUP BY والـ Aggregate functions
+### Aggregate functions: بتحوّل صفوف كتير لقيمة واحدة
+| الدالة | بترجّع |
+|---|---|
+| `COUNT(*)` | عدد الصفوف |
+| `COUNT(Email)` | عدد الصفوف اللي العمود فيها مش NULL |
+| `SUM(Price)` | المجموع |
+| `AVG(Price)` | المتوسط |
+| `MIN(Price)` / `MAX(Price)` | الأصغر / الأكبر |
+
+### GROUP BY: احسب لكل مجموعة لوحدها
+```sql
+SELECT Genre, COUNT(*) AS BooksCount, AVG(Price) AS AvgPrice
+FROM Books
+GROUP BY Genre;
+```
+⚠️ أي عمود في `SELECT` مش جوه دالة، **لازم** يبقى في `GROUP BY`.
+
+### HAVING: فلترة بعد التجميع
+```sql
+SELECT Genre, COUNT(*) AS BooksCount
+FROM Books
+GROUP BY Genre
+HAVING COUNT(*) > 2;
+```
+- `WHERE`: بتفلتر **الصفوف** قبل التجميع.
+- `HAVING`: بتفلتر **المجموعات** بعد التجميع.
+
+### ترتيب التنفيذ
+`FROM` ← `JOIN` ← `WHERE` ← `GROUP BY` ← `HAVING` ← `SELECT` ← `ORDER BY`
