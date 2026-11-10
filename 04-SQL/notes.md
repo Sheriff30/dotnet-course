@@ -4,8 +4,8 @@
 - [x] الدرس 1: يعني إيه Database
 - [x] الدرس 2: تسطيب SQL Server و SSMS
 - [x] الدرس 3: SELECT و WHERE و ORDER BY
-- [ ] الدرس 4: INSERT و UPDATE و DELETE
-- [ ] الدرس 5: JOINs
+- [x] الدرس 4: INSERT و UPDATE و DELETE
+- [x] الدرس 5: JOINs
 - [ ] الدرس 6: GROUP BY والـ Aggregate functions
 - [ ] الدرس 7: Keys و Normalization
 - [ ] الدرس 8: Indexes و Stored Procedures و Views
@@ -115,3 +115,46 @@ ROLLBACK;                   -- رجّع كل حاجة
 ### تواريخ
 - `GETDATE()`: التاريخ والوقت دلوقتي
 - `CAST(GETDATE() AS DATE)`: التاريخ بس
+
+## الدرس 5: JOINs
+### INNER JOIN: الصفوف اللي ليها مقابل في الجدولين بس
+```sql
+SELECT m.FullName, b.BorrowDate
+FROM Borrowings b
+INNER JOIN Members m ON b.MemberId = m.Id;
+```
+- `ON`: شرط الربط، غالباً Foreign Key = Primary Key.
+- `b` و `m`: Aliases (أسامي مختصرة للجداول).
+- لو العمود موجود في الجدولين (زي `Id`)، لازم تكتب الجدول قبله: `m.Id`.
+
+### 3 جداول
+```sql
+SELECT m.FullName, bk.Title, br.BorrowDate
+FROM Borrowings br
+JOIN Members m ON br.MemberId = m.Id
+JOIN Books bk  ON br.BookId = bk.Id;
+```
+(`JOIN` لوحدها = `INNER JOIN`)
+
+### LEFT JOIN: كل صفوف الجدول الشمال، حتى لو ملهاش مقابل
+```sql
+SELECT m.FullName, br.BorrowDate
+FROM Members m
+LEFT JOIN Borrowings br ON br.MemberId = m.Id;
+-- اللي ملوش استعارات: BorrowDate = NULL
+```
+
+### اللي ملوش مقابل خالص
+```sql
+SELECT m.FullName
+FROM Members m
+LEFT JOIN Borrowings br ON br.MemberId = m.Id
+WHERE br.Id IS NULL;
+```
+
+| النوع | بيرجّع |
+|---|---|
+| `INNER JOIN` | اللي ليه مقابل في الاتنين |
+| `LEFT JOIN` | كل الشمال + المقابل لو موجود |
+| `RIGHT JOIN` | كل اليمين + المقابل (نادراً بنستخدمها) |
+| `FULL JOIN` | كل حاجة من الاتنين |
