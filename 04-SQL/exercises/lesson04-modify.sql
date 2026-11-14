@@ -49,7 +49,7 @@ DELETE FROM Members Where id = 9;
 
 
 DELETE FROM Books Where id = 1;
-
+SELECT * FROM Borrowings;
 
 -- ⭐ 10. جرّب الـ Transaction:
 --    امسح كل الأعضاء من غير WHERE، اتأكد إنهم اتمسحوا بـ SELECT، وبعدين رجّعهم بـ ROLLBACK

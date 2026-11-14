@@ -56,6 +56,7 @@ WHERE m.Id = 1
 -- 6. هات كل الأعضاء واستعاراتهم، حتى الأعضاء اللي ماستعاروش حاجة
 --    (FullName و BookId و BorrowDate)
 
+SELECT SUM(AvailableCopies) AS TOTALAVAILABLECOPPIES FROM Books;   -- مجموع النسخ
 
 -- 7. هات الأعضاء اللي عمرهم ما استعاروا حاجة
 
