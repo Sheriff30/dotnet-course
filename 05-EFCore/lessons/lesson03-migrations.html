@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Migrations - الدرس 3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f7f7f5; --card:#ffffff; --text:#1d1d1f; --muted:#5f6368; --line:#e3e3e0;
+  --accent:#5b3cc4; --accent-soft:#efeafd; --code-bg:#1e1e24; --code-text:#e6e6ea;
+  --warn:#9a5b00; --warn-bg:#fff4e0; --ok:#1d7a46; --ok-bg:#e6f6ec;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121214; --card:#1b1b1f; --text:#ececf1; --muted:#a0a0aa; --line:#2c2c33;
+    --accent:#a58bff; --accent-soft:#2a2240; --code-bg:#0d0d10; --code-text:#e6e6ea;
+    --warn:#ffb648; --warn-bg:#2e2412; --ok:#5ed38f; --ok-bg:#132a1d;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121214; --card:#1b1b1f; --text:#ececf1; --muted:#a0a0aa; --line:#2c2c33;
+  --accent:#a58bff; --accent-soft:#2a2240; --code-bg:#0d0d10; --code-text:#e6e6ea;
+  --warn:#ffb648; --warn-bg:#2e2412; --ok:#5ed38f; --ok-bg:#132a1d;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Cairo",system-ui,sans-serif;font-size:17px;line-height:1.9}
+main{max-width:820px;margin:0 auto;padding:32px 16px 80px}
+h1{font-size:30px;margin:0 0 4px}
+.sub{color:var(--muted);margin:0 0 28px}
+h2{font-size:22px;margin:40px 0 12px;padding-top:12px;border-top:1px solid var(--line)}
+h3{font-size:18px;margin:24px 0 8px}
+p{margin:8px 0}
+bdi, code{unicode-bidi:isolate}
+code{direction:ltr;font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.88em;background:var(--accent-soft);color:var(--accent);padding:1px 6px;border-radius:5px}
+pre{direction:ltr;text-align:left;background:var(--code-bg);color:var(--code-text);padding:16px 18px;border-radius:12px;overflow-x:auto;font-size:14px;line-height:1.6;margin:12px 0}
+pre code{background:none;color:inherit;padding:0;font-size:inherit}
+.c{color:#8b949e}
+table{width:100%;border-collapse:collapse;margin:12px 0;background:var(--card);border-radius:12px;overflow:hidden;font-size:15px}
+th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:right;vertical-align:top}
+th{background:var(--accent-soft);font-weight:700}
+tr:last-child td{border-bottom:none}
+.note{background:var(--warn-bg);color:var(--text);border-right:4px solid var(--warn);padding:12px 16px;border-radius:10px;margin:14px 0}
+.tip{background:var(--ok-bg);border-right:4px solid var(--ok);padding:12px 16px;border-radius:10px;margin:14px 0}
+.step{display:inline-block;background:var(--accent);color:#fff;border-radius:999px;padding:0 12px;font-size:14px;margin-left:8px}
+ol,ul{padding-right:22px;margin:8px 0}
+li{margin:4px 0}
+.cycle{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px}
+</style>
+</head>
+<body>
+<main>
+
+<h1>الدرس 3: <bdi>Code-First</bdi> و <bdi>Migrations</bdi></h1>
+<p class="sub">المرحلة 5: <bdi>Entity Framework Core</bdi></p>
+
+<h2>طريقتين للشغل مع <bdi>EF Core</bdi></h2>
+<table>
+<tr><th></th><th><bdi>Database-First</bdi></th><th><bdi>Code-First</bdi> ⭐</th></tr>
+<tr><td>بتعمل إيه الأول</td><td>الجداول بـ <bdi>SQL</bdi></td><td>الـ <bdi>Classes</bdi> بـ <bdi>C#</bdi></td></tr>
+<tr><td>مين بيعمل الجداول</td><td>إنت</td><td><bdi>EF Core</bdi></td></tr>
+<tr><td>عملناه في</td><td>الدرس 2</td><td>الدرس ده</td></tr>
+</table>
+<p><bdi>Code-First</bdi> هو الأشهر في المشاريع الجديدة: بتكتب <bdi>Classes</bdi>، و <bdi>EF Core</bdi> بيعمل الـ <bdi>Database</bdi> والجداول لوحده.</p>
+
+<h2>يعني إيه <bdi>Migration</bdi>؟</h2>
+<p><bdi>Migration</bdi> = ملف <bdi>C#</bdi> فيه <b>تغيير واحد</b> في شكل الـ <bdi>Database</bdi>. زي الـ <bdi>commit</bdi> في <bdi>Git</bdi>، بس للـ <bdi>Database</bdi>.</p>
+<ul>
+<li>أول <bdi>Migration</bdi>: اعمل جدول <code>Books</code></li>
+<li>التانية: ضيف عمود <code>Genre</code> لجدول <code>Books</code></li>
+<li>التالتة: اعمل جدول <code>Members</code></li>
+</ul>
+<p>بتتنفذ <b>بالترتيب</b>، فأي حد ياخد المشروع ويشغّلها، يطلعله نفس الـ <bdi>Database</bdi> بالظبط. وده هيفيدك بين الـ <bdi>PC</bdi> والماك: مش هتحتاج ملف <code>setup.sql</code> تاني.</p>
+
+<h2><span class="step">1</span>سطّب أداة الـ <bdi>Migrations</bdi> (مرة واحدة بس)</h2>
+<p>افتح <bdi>PowerShell</bdi> واكتب:</p>
+<pre><code>dotnet tool install --global dotnet-ef --version 10.*</code></pre>
+<p>اقفل الـ <bdi>PowerShell</bdi> وافتحه تاني، واتأكد:</p>
+<pre><code>dotnet ef</code></pre>
+<p>المفروض يطلعلك رسمة حصان 🦄 (شعار <bdi>EF Core</bdi>).</p>
+
+<h2><span class="step">2</span>بص على المشروع</h2>
+<p>ملف <code>Book.cs</code>:</p>
+<pre><code>public class Book
+{
+    public int Id { get; set; }
+    public string Title { get; set; }
+    public string Author { get; set; }
+    public decimal Price { get; set; }
+}</code></pre>
+<p>ملف <code>LibraryContext.cs</code> نفس الدرس اللي فات، بس الـ <bdi>Connection String</bdi> فيه <code>Database=LibraryDb</code>. الـ <bdi>Database</bdi> دي <b>مش موجودة</b>، و <bdi>EF Core</bdi> هو اللي هيعملها.</p>
+
+<h2><span class="step">3</span>اعمل أول <bdi>Migration</bdi></h2>
+<p>روح لفولدر المشروع (اللي فيه ملف <code>.csproj</code>):</p>
+<pre><code>cd D:\dotnet-course\05-EFCore\exercises\Lesson03-Migrations\Lesson03-Migrations
+dotnet ef migrations add InitialCreate</code></pre>
+<p>هيتعمل فولدر اسمه <code>Migrations</code>، وجواه ملف زي <code>20261114_InitialCreate.cs</code>. افتحه:</p>
+<pre><code>protected override void Up(MigrationBuilder migrationBuilder)
+{
+    migrationBuilder.CreateTable(
+        name: "Books",
+        columns: table => new
+        {
+            Id = table.Column&lt;int&gt;(nullable: false)
+                .Annotation("SqlServer:Identity", "1, 1"),
+            Title = table.Column&lt;string&gt;(nullable: true),
+            ...
+        },
+        constraints: table => { table.PrimaryKey("PK_Books", x => x.Id); });
+}
+
+protected override void Down(MigrationBuilder migrationBuilder)
+{
+    migrationBuilder.DropTable(name: "Books");
+}</code></pre>
+<p>ده <code>CREATE TABLE</code> بس مكتوب بـ <bdi>C#</bdi> 😄 ولاحظ إن <bdi>EF Core</bdi> فهم لوحده إن <code>Id</code> هو الـ <bdi>Primary Key</bdi> وإنه <bdi>IDENTITY</bdi>.</p>
+<table>
+<tr><td><code>Up()</code></td><td>إزاي <b>تطبّق</b> التغيير</td></tr>
+<tr><td><code>Down()</code></td><td>إزاي <b>ترجع</b> فيه</td></tr>
+</table>
+<div class="note">⚠️ لحد دلوقتي مفيش حاجة اتعملت في الـ <bdi>Database</bdi>. ده مجرد <b>ملف</b> فيه الخطة.</div>
+
+<h2><span class="step">4</span>نفّذ الـ <bdi>Migration</bdi></h2>
+<pre><code>dotnet ef database update</code></pre>
+<p>دلوقتي <bdi>EF Core</bdi>:</p>
+<ol>
+<li>عمل <bdi>Database</bdi> اسمها <code>LibraryDb</code></li>
+<li>عمل جدول <code>Books</code></li>
+<li>عمل جدول <code>__EFMigrationsHistory</code>، وكتب فيه إن <code>InitialCreate</code> اتنفذت</li>
+</ol>
+<p>افتح <bdi>SSMS</bdi> واعمل <bdi>Refresh</bdi> على <bdi>Databases</bdi>، هتلاقي <code>LibraryDb</code> 🎉</p>
+<div class="tip">جدول <code>__EFMigrationsHistory</code> مهم: <bdi>EF Core</bdi> بيكتب فيه كل <bdi>Migration</bdi> نفّذها. فلما تشغّل <code>database update</code> تاني، بينفّذ <b>الجديد بس</b>.</div>
+
+<h2><span class="step">5</span>غيّر الـ <bdi>Class</bdi></h2>
+<p>عايز تضيف عمود؟ <b>متلمسش الـ <bdi>Database</bdi></b>. عدّل الـ <bdi>Class</bdi> واعمل <bdi>Migration</bdi> جديدة:</p>
+<pre><code><span class="c">// ضيف السطر ده في Book</span>
+public int Pages { get; set; }</code></pre>
+<pre><code>dotnet ef migrations add AddPages
+dotnet ef database update</code></pre>
+<p><bdi>EF Core</bdi> هيقارن الـ <bdi>Classes</bdi> بآخر <bdi>Migration</bdi>، ويعرف لوحده إن في عمود جديد، ويعمل <code>ALTER TABLE Books ADD Pages INT</code> 🪄</p>
+
+<h3>الدورة اللي هتكررها طول عمرك</h3>
+<div class="cycle">
+<ol>
+<li>عدّل الـ <bdi>Class</bdi></li>
+<li><code>dotnet ef migrations add اسم_واضح</code></li>
+<li><code>dotnet ef database update</code></li>
+</ol>
+</div>
+<div class="tip">💡 اختار أسامي واضحة زي <code>AddPagesToBooks</code> أو <code>CreateMembersTable</code>، عشان تفهم كل واحدة عملت إيه بعد شهور.</div>
+
+<h2><span class="step">6</span>الرجوع</h2>
+<table>
+<tr><th>الأمر</th><th>بيعمل إيه</th></tr>
+<tr><td><code>dotnet ef database update InitialCreate</code></td><td>يرجع لـ <bdi>Migration</bdi> معيّنة (بينفّذ <code>Down()</code> للي بعدها)</td></tr>
+<tr><td><code>dotnet ef database update</code></td><td>يرجع لآخر <bdi>Migration</bdi></td></tr>
+<tr><td><code>dotnet ef migrations remove</code></td><td>يمسح آخر <bdi>Migration</bdi> (لو لسه <b>متنفذتش</b>)</td></tr>
+<tr><td><code>dotnet ef migrations list</code></td><td>يعرض كل الـ <bdi>Migrations</bdi></td></tr>
+</table>
+<div class="note">⚠️ قاعدة ذهبية: متعدّلش ملف <bdi>Migration</bdi> بإيدك بعد ما يتنفذ. لو عايز تغيّر حاجة، اعمل <bdi>Migration</bdi> <b>جديدة</b>.</div>
+
+<h2>💡 حاجة هتلاحظها</h2>
+<p>لو فتحت الجدول في <bdi>SSMS</bdi>، هتلاقي <code>Title</code> نوعه <code>nvarchar(max)</code> ومسموح يبقى <bdi>NULL</bdi>. ده لأننا مقلناش لـ <bdi>EF Core</bdi> إن العنوان إجباري ولا طوله كام. وده هنظبطه في <b>الدرس 7</b>.</p>
+
+<h2>✍️ التمرين: 5 أسئلة</h2>
+<p>اكتب إجاباتك في ملف <code>answers.md</code> اللي في المشروع:</p>
+<ol>
+<li>اعمل <code>InitialCreate</code> و <code>database update</code>، واتأكد من <code>LibraryDb</code> في <bdi>SSMS</bdi>.</li>
+<li>افتح ملف الـ <bdi>Migration</bdi>، واشرح بكلامك <code>Up()</code> و <code>Down()</code> بيعملوا إيه.</li>
+<li>ضيف <code>Genre</code> من نوع <code>string</code> لـ <code>Book</code>، واعمل <bdi>Migration</bdi>.</li>
+<li>اعمل <bdi>Class</bdi> جديد <code>Member</code> فيه <code>Id</code> و <code>FullName</code> و <code>Email</code> و <code>JoinDate</code>، وضيف <code>DbSet&lt;Member&gt; Members</code> في الـ <bdi>Context</bdi>، واعمل <bdi>Migration</bdi>.</li>
+<li>ارجع لـ <bdi>Migration</bdi> سؤال 3، وشوف جدول <code>Members</code> حصله إيه في <bdi>SSMS</bdi>، وبعدين رجّع لآخر واحدة.</li>
+</ol>
+<div class="tip">💡 بعد كل <bdi>Migration</bdi> افتح ملفها وبص على اللي <bdi>EF Core</bdi> كتبه. دي أحسن طريقة تفهم بيها.</div>
+
+</main>
+</body>
+</html>

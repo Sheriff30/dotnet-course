@@ -1,8 +1,8 @@
 # المرحلة 05: Entity Framework Core
 
 ## الدروس
-- [ ] الدرس 1: يعني إيه ORM
-- [ ] الدرس 2: DbContext و Entities
+- [x] الدرس 1: يعني إيه ORM
+- [x] الدرس 2: DbContext و Entities
 - [ ] الدرس 3: Code-First و Migrations
 - [ ] الدرس 4: العلاقات
 - [ ] الدرس 5: CRUD
@@ -52,3 +52,33 @@ var books = db.Books.ToList();
 | `WHERE Id = 1` (صف واحد) | `.Find(1)` أو `.FirstOrDefault(b => b.Id == 1)` |
 
 ⚠️ مفيش حاجة بتتبعت للـ Database غير لما تكتب `ToList()` أو `Count()` أو `First()`... قبلها ده مجرد "وصف" للـ query.
+
+## الدرس 3: Code-First و Migrations
+- **Database-First:** الجداول موجودة، و EF Core بيقرا منها (اللي عملناه في الدرس 2).
+- **Code-First:** بتكتب Classes، و EF Core بيعمل الجداول. ⭐ الأشهر.
+
+### الأداة (مرة واحدة على الجهاز)
+```powershell
+dotnet tool install --global dotnet-ef --version 10.*
+```
+
+### الأوامر (من فولدر المشروع اللي فيه الـ .csproj)
+| الأمر | بيعمل إيه |
+|---|---|
+| `dotnet ef migrations add InitialCreate` | يعمل ملف Migration فيه التغييرات |
+| `dotnet ef database update` | ينفّذ الـ Migrations على الـ Database |
+| `dotnet ef migrations list` | يعرض كل الـ Migrations |
+| `dotnet ef database update AddGenre` | يرجع لـ Migration معيّنة |
+| `dotnet ef migrations remove` | يمسح آخر Migration (لو لسه متنفذتش) |
+
+### الـ Migration file
+- `Up()`: إزاي تطبّق التغيير (CREATE TABLE / ADD COLUMN)
+- `Down()`: إزاي ترجع فيه (DROP TABLE / DROP COLUMN)
+
+### الدورة كل مرة تغيّر الـ Classes
+1. عدّل الـ Class
+2. `dotnet ef migrations add اسم_واضح`
+3. `dotnet ef database update`
+
+### __EFMigrationsHistory
+جدول بيعمله EF Core، فيه أسامي الـ Migrations اللي اتنفذت.
