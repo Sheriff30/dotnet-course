@@ -7,7 +7,6 @@ namespace Lesson03_Migrations
         public string Author { get; set; }
         public decimal Price { get; set; }
         public int Pages { get; set; }
-
         public string Genre { get; set; }
     }
 }

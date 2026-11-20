@@ -3,7 +3,7 @@
 ## الدروس
 - [x] الدرس 1: يعني إيه ORM
 - [x] الدرس 2: DbContext و Entities
-- [ ] الدرس 3: Code-First و Migrations
+- [x] الدرس 3: Code-First و Migrations
 - [ ] الدرس 4: العلاقات
 - [ ] الدرس 5: CRUD
 - [ ] الدرس 6: Loading strategies
@@ -82,3 +82,16 @@ dotnet tool install --global dotnet-ef --version 10.*
 
 ### __EFMigrationsHistory
 جدول بيعمله EF Core، فيه أسامي الـ Migrations اللي اتنفذت.
+
+## الدرس 4: العلاقات
+- **Navigation Property:** Property بتشاور على Object تاني (`book.Category`)، مش عمود في الـ Database.
+- **Convention:** `CategoryId` + `Category` ← EF Core بيفهم لوحده إنها Foreign Key.
+
+| العلاقة | الناحية الأولى | الناحية التانية |
+|---|---|---|
+| One-to-Many | `List<Book> Books` | `int CategoryId` + `Category Category` |
+| Many-to-Many (فيه بيانات زيادة) | Class وسيط (`Borrowing`) فيه 2 FKs | `List<Borrowing>` في الناحيتين |
+| Many-to-Many (بسيطة) | `List<Tag> Tags` | `List<Book> Books` (EF بيعمل الجدول الوسيط لوحده) |
+
+- `DateTime?` ← `?` معناها ممكن يبقى `null`.
+- EF Core بيعمل Index على كل Foreign Key لوحده.
