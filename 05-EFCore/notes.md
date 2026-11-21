@@ -4,7 +4,7 @@
 - [x] الدرس 1: يعني إيه ORM
 - [x] الدرس 2: DbContext و Entities
 - [x] الدرس 3: Code-First و Migrations
-- [ ] الدرس 4: العلاقات
+- [x] الدرس 4: العلاقات
 - [ ] الدرس 5: CRUD
 - [ ] الدرس 6: Loading strategies
 - [ ] الدرس 7: Fluent API و Data Annotations
@@ -95,3 +95,18 @@ dotnet tool install --global dotnet-ef --version 10.*
 
 - `DateTime?` ← `?` معناها ممكن يبقى `null`.
 - EF Core بيعمل Index على كل Foreign Key لوحده.
+
+## الدرس 5: CRUD
+| | SQL | EF Core |
+|---|---|---|
+| Create | `INSERT` | `db.Books.Add(book)` / `AddRange(...)` |
+| Read | `SELECT` | `Find(id)` / `FirstOrDefault(...)` / `Where(...).ToList()` / `Any(...)` |
+| Update | `UPDATE` | هات الـ Object ← غيّر الـ Property ← `SaveChanges()` |
+| Delete | `DELETE` | `db.Books.Remove(book)` |
+
+- مفيش حاجة بتروح للـ Database غير بـ `SaveChanges()`.
+- `SaveChanges()` = Transaction: يا كله يا مفيش.
+- **Change Tracking:** EF Core بيعرف إيه اللي اتغيّر، وبيعمل UPDATE للأعمدة دي بس.
+- **States:** Added ← INSERT · Unchanged ← ولا حاجة · Modified ← UPDATE · Deleted ← DELETE
+- `db.Entry(book).State` ← تشوف الحالة.
+- اتشيّك على `null` دايماً قبل Update و Delete.
